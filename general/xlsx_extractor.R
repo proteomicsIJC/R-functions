@@ -6,9 +6,9 @@ xlsx_tt <- function(tt_cleaned_list){
     writeData(wb, sheet = i, tt_cleaned_list[[i]])
     
     # Create general style
-    header_style_global <- createStyle(fontColour = "black",halign = "center", 
+    header_style_global <- createStyle(fontColour = "black",halign = "right",
                                        border = c("top","left","right","bottom"), textDecoration = "bold")
-    style_for_not_head <- createStyle(fontColour = "black", halign = "center", valign = "center",
+    style_for_not_head <- createStyle(fontColour = "black", halign = "right", valign = "center",
                                       border = c("top","left","right","bottom"))
     
     # Add general styles
