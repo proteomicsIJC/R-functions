@@ -6,7 +6,7 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     
     
     batching <- dataset
-    batching <- data.table::dcast(batching, 
+    batching <- reshape2::dcast(batching, 
                       protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
     rownames(batching) <- batching$protein_group
     batching <- batching[,-1]
@@ -22,7 +22,7 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     dataset <- dataset
     median_pooled <- median(dataset$normalized_intensity)
     batching <- dataset %>%
-      data.table::dcast(plex + protein_group + sample_name ~ sample_or_pool, value.var = "normalized_intensity", fun.aggregate = median) %>% 
+      reshape2::dcast(plex + protein_group + sample_name ~ sample_or_pool, value.var = "normalized_intensity", fun.aggregate = median) %>% 
       fill(POOL, .direction = c("up")) %>%
       mutate(unbatched_intensity = sample - POOL) %>% 
       mutate(was_pool = ifelse(is.na(sample),"Was pool","Was not pool")) %>% 
@@ -38,7 +38,7 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
       un_batched_data <- select(un_batched_data, subset = -c(remove_this_columns[[i]]))
     }
     batching <- batching
-    batching <- data.table::dcast(batching, 
+    batching <- reshape2::dcast(batching, 
                       protein_group ~ sample_name, value.var="unbatched_intensity", fun.aggregate = median)
     rownames(batching) <- batching$protein_group
     batching <- batching[,-1]
@@ -54,7 +54,7 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     batching <- dataset %>% 
       filter(sample_or_pool == "sample")
     
-    batching <- data.table::dcast(batching, 
+    batching <- reshape2::dcast(batching, 
                       protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
     
     rownames(batching) <- batching$protein_group
@@ -82,7 +82,7 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     batching <- dataset %>% 
       filter(sample_or_pool == "sample")
     
-    batching <- data.table::dcast(batching, 
+    batching <- reshape2::dcast(batching, 
                       protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
     
     rownames(batching) <- batching$protein_group

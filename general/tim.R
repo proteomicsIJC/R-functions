@@ -51,7 +51,7 @@ tim <- function(impute,dataset,NAs_prop){
       filter(per_NA <= NAs_prop)
     
     # Reshape the data to impute
-    to_imput <- data.table::dcast(dataset, 
+    to_imput <- reshape2::dcast(dataset, 
                       protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
     
     rownames(to_imput) <- to_imput$protein_group

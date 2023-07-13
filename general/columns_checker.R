@@ -3,7 +3,7 @@ columns_checker <- function(dataset){
   batching <- dataset %>% 
     filter(sample_or_pool == "sample")
   
-  batching <- dcast(batching, 
+  batching <- reshape2::dcast(batching, 
                     protein_group ~ sample_name, value.var="normalized_intensity",
                     fun.aggregate = mean)
   batching <- batching[,-1]
