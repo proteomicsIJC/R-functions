@@ -16,7 +16,7 @@ tt_list_cleaner <- function(list, meta_data){
     sample_2 <- str_split(both_samp, "_vs_", simplify = T)[2]
     
     # Corresponding to meta_data 2
-    meta_data2 <- meta_data[meta_data$sample_name %in% to_colour2$sample_name,]
+    meta_data2 <- meta_data[meta_data$sample_name %in% meta_data_tracker$sample_name,]
     
     # Correspondance
     correspond1 <- meta_data2$sample_name[meta_data2$exp_group == sample_1]
@@ -42,7 +42,7 @@ tt_list_cleaner <- function(list, meta_data){
       select(c(protein_group,all_of(no_pg)), everything())
     
     # col_name_change
-    old_names <- colnames(cleanedtt)[colnames(cleanedtt) %in% to_colour2$sample_name]
+    old_names <- colnames(cleanedtt)[colnames(cleanedtt) %in% meta_data_tracker$sample_name]
     new_names <- c()
     
     for ( k in 1:length(old_names)){
