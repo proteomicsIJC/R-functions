@@ -1,4 +1,4 @@
-tt_list_cleaner <- function(list, meta_data){
+tt_list_cleaner <- function(list, meta_data, name_in_meta_data_tracker = "exp_group"){
   final_names <- names(list)
   final_list <- list()
   for (i in 1:length(list)){
@@ -19,8 +19,8 @@ tt_list_cleaner <- function(list, meta_data){
     meta_data2 <- meta_data[meta_data$sample_name %in% meta_data_tracker$sample_name,]
     
     # Correspondance
-    correspond1 <- meta_data2$sample_name[meta_data2$exp_group == sample_1]
-    correspond2 <- meta_data2$sample_name[meta_data2$exp_group == sample_2]
+    correspond1 <- meta_data2$sample_name[meta_data2[,name_in_meta_data_tracker] == sample_1]
+    correspond2 <- meta_data2$sample_name[meta_data2[,name_in_meta_data_tracker] == sample_2]
     correspond <- c(correspond1,correspond2)
     
     # Corresponding to meta_data 2
@@ -46,7 +46,7 @@ tt_list_cleaner <- function(list, meta_data){
     new_names <- c()
     
     for ( k in 1:length(old_names)){
-      grup <- meta_data$exp_group[meta_data$sample_name == old_names[k]]
+      grup <- meta_data[,name_in_meta_data_tracker][meta_data$sample_name == old_names[k]]
       sample_number <- meta_data$sample_number[meta_data$sample_name == old_names[k]]
       sample_number <- gsub(x = sample_number, "sample_","")
       new_names[k] <- paste(grup,sample_number,sep = ".")
