@@ -1,4 +1,4 @@
-tim <- function(impute,dataset,NAs_prop){
+tim <- function(impute,dataset,NAs_prop,presence_no_presence = F){
   # PGs that have some NA
   for_nas <- dataset
   cols <- c("protein_group")
@@ -85,5 +85,15 @@ tim <- function(impute,dataset,NAs_prop){
     cat(paste0("impute == yes ",unique(NAs_prop)), file = "./results/used_parameters.txt", sep = "\n", append = T)
     cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
   }
+  if (presence_no_presence = T){
+    cat("Returning an expression matrix with all NAs to do presence/No presence analysis")
+    to_imput <- reshape2::dcast(dataset, 
+                                protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
+    
+    rownames(to_imput) <- to_imput$protein_group
+    to_imput <- to_imput[,-1]
+    expression_mat_presence_no_presence <<- to_imput
+  }
+  
   return(imputed_data)
 }
