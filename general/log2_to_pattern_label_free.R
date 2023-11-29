@@ -1,4 +1,4 @@
-log2_to_pattern <- function(patterns,dataset){
+log2_to_pattern_label_free <- function(patterns,dataset){
   print("log 2 transformation of the intensity values")
   print("Note that, negative values after transformation have been assigned to NA")
   cat("log2 transformation",file = "./results/used_parameters.txt",sep = "\n",append = T)
