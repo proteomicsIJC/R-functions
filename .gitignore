@@ -8,6 +8,6 @@
 /**.html
 /TMT_PEAKS_Workflow_user.RMD
 .Rhistory
-./general/tt_extractor.R
-./general/tt_list_cleaner.R
-./general/xlsx_extractor.R
+/general/tt_extractor.R
+/general/tt_list_cleaner.R
+/general/xlsx_extractor.R
