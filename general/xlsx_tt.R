@@ -1,4 +1,4 @@
-xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annoation, expression_matrix){
+xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annoation, expression_matrix, filename = "TT_res.xlsx"){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -110,10 +110,8 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
       arrange(adj.P.Val)}
   tts <<- list_of_tts
   
-  
-  
   #### Time for the xlsx file
-  wb <- createWorkbook("Ignasi Jarne Sanz")
+  wb <- createWorkbook("Proteomics Unit IJC")
   for (m in 1:length(list_of_tts)){
     ## Extract the datasets
     dataset <- list_of_tts[[m]]
@@ -127,23 +125,58 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
               startCol = 1, startRow = 1, colNames = T)
     
     ## Add adjusted p value style
+    adjusted_p_val_columns <- which(colnames(dataset) == "adj.P.Val")
+    adjusted_p_val_sign_rows <- which(dataset$adj.P.Val <= 0.05)
+    
+    addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = "#c3eccb", fontColour = "#1f7046"), 
+             rows = adjusted_p_val_sign_rows, cols = adjusted_p_val_columns)
+    
     
     ## Bold and right-center align all column names
     addStyle(wb, sheet = m, style = createStyle(textDecoration = "bold", halign = "left"), 
              rows = 1, cols = 1:ncol(dataset))
     
     ## Annotation style
-    ##cols_of_annot <- colnames(annotation)
-    ##annotation_col_indices <- sapply(cols_of_annot, function(col) which(names(dataset) == col))
+    cols_of_annot <- colnames(annotation)
+    annotation_col_indices <- sapply(cols_of_annot, function(col) which(names(dataset) == col))
     
-    ##addStyle(wb, sheet = m, style = createStyle(border = "top", textDecoration = "bold"), 
-    ##           rows = min(annotation_col_indices), cols = min(annotation_col_indices))
+    addStyle(wb, sheet = m, style = createStyle(border = c("bottom","right","left","top"), textDecoration = "bold"), 
+             rows = min(annotation_col_indices), cols = 1:ncol(dataset))
     
-    ##addStyle(wb, sheet = m, style = createStyle(border = "top", textDecoration = "bold"), 
-    ##           rows = 1:(nrow(dataset) + 1), cols = max(annotation_col_indices))
+    setColWidths(wb, sheet = m, cols = annotation_col_indices, widths = 20)
     
     ## ADD META DATA COLOR !!!!
+    # Filter meta_data
+    meta_data_now <- meta_data[rownames(meta_data) %in% colnames(dataset),]
+    if (nrow(meta_data_now) == 0)
+    {remove(meta_data_now)
+    } else {
+      meta_data_now <- meta_data_now
+      # what samples each colors
+      columns_colour_1 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]]
+      columns_colour_2 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]]
+      
+      # do the which
+      quin_1 <- sapply(columns_colour_1, function(col) which(names(dataset) == col))
+      quin_2 <- sapply(columns_colour_2, function(col) which(names(dataset) == col))
+      
+      # pick the colors
+      colors1 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]])
+      colors2 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]])
+      
+      # put the style
+      addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors1,
+                                                  border = c("bottom","right","left","top"), textDecoration = "bold"), 
+               rows = 1, cols = quin_1)
+      
+      addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors2,
+                                                  border = c("bottom","right","left","top"), textDecoration = "bold"), 
+               rows = 1, cols = quin_2)}
     
+    
+    ## Widths for the rest of the data
+    setColWidths(wb, sheet = m, cols = max(annotation_col_indices)+1:ncol(dataset), widths = 15)
   }
-  saveWorkbook(wb = wb, "Top_Table_results.xlsx")
+  saveWorkbook(wb = wb, filename)
+  return(list_of_tts)
 }
