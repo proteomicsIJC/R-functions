@@ -1,4 +1,4 @@
-xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annoation, expression_matrix, filename = "TT_res.xlsx"){
+xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx"){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -87,8 +87,13 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     
     ## meta data work
     meta_data_now <- meta_data %>% 
-      filter(exp_group %in% c(samples1,samples2)) %>% 
+      filter(exp_group %in% c(samples1,samples2))  
+    meta_data_now <- meta_data_now %>% 
+      mutate(Rows = rownames(meta_data_now)) %>% 
       arrange(factor(exp_group, levels = c(samples1,samples2)))
+    rownames(meta_data_now) <- meta_data_now$Rows 
+    meta_data_now <- meta_data_now %>% 
+      subset(select = -c(Rows))
     
     samples_now <- rownames(meta_data_now)[meta_data_now$exp_group %in% c(samples1,samples2)]
     ## expression matrix
@@ -149,7 +154,8 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     # Filter meta_data
     meta_data_now <- meta_data[rownames(meta_data) %in% colnames(dataset),]
     if (nrow(meta_data_now) == 0)
-    {remove(meta_data_now)
+    {##remove(meta_data_now)
+      next
     } else {
       meta_data_now <- meta_data_now
       # what samples each colors
