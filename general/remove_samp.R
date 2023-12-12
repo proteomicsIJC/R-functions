@@ -1,10 +1,12 @@
-remove_samp <- function(dataset, samples=NULL){
+remove_samp <- function(dataset, samples=NULL, reasons=NULL){
   if(!is.null(samples)){
     print("Removing indicated samples")
-    for (i in 1:length(samples)){
-      dataset <- subset(dataset, sample_name!=samples[i])}
     cat("remove_samp", file = "./results/used_parameters.txt",append = T, sep = "\n")
-    cat(paste0("The following samples have been removed due to low quality of the data: ",samples), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    for (i in 1:length(samples)){
+      dataset <- subset(dataset, sample_name!=samples[i])
+      cat(paste0("The following sample has been removed: ",samples," Reason for the removal: ",reasons[i]), 
+          file = "./results/used_parameters.txt",append = T, sep = "\n")
+    }
     cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
   }
   if (is.null(samples)){
