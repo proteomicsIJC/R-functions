@@ -1,4 +1,4 @@
-xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation , expression_matrix, filename = "TT_res.xlsx"){
+xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx"){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -157,27 +157,49 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     {##remove(meta_data_now)
       next
     } else {
-      meta_data_now <- meta_data_now
+      for (group in 1:length(unique(meta_data_now$exp_group))){
+        meta_data_now_2 <- meta_data_now
+        group_now <- unique(meta_data_now_2$exp_group)[group]
+        meta_data_now_2 <- meta_data_now_2 %>% 
+          filter(exp_group == group_now)
+        
+        # what samples each colors
+        columns_colour <- rownames(meta_data_now_2)[meta_data_now_2$exp_group == unique(meta_data_now_2$exp_group)]
+        
+        # do the which
+        quin <- sapply(columns_colour, function(col) which(names(dataset) == col))
+        
+        # pick the colors
+        colorss <- unique(meta_data_now_2$colorins[meta_data_now_2$exp_group == group_now])
+        
+        # put the style
+        addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colorss,
+                                                    border = c("bottom","right","left","top"), textDecoration = "bold"), 
+                 rows = 1, cols = quin)
+        
+        
+      }
       # what samples each colors
-      columns_colour_1 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]]
-      columns_colour_2 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]]
+      # columns_colour_1 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]]
+      # columns_colour_2 <- rownames(meta_data_now)[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]]
       
       # do the which
-      quin_1 <- sapply(columns_colour_1, function(col) which(names(dataset) == col))
-      quin_2 <- sapply(columns_colour_2, function(col) which(names(dataset) == col))
+      # quin_1 <- sapply(columns_colour_1, function(col) which(names(dataset) == col))
+      # quin_2 <- sapply(columns_colour_2, function(col) which(names(dataset) == col))
       
       # pick the colors
-      colors1 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]])
-      colors2 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]])
+      # colors1 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[1]])
+      # colors2 <- unique(meta_data_now$colorins[meta_data_now$exp_group == unique(meta_data_now$exp_group)[2]])
       
       # put the style
-      addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors1,
-                                                  border = c("bottom","right","left","top"), textDecoration = "bold"), 
-               rows = 1, cols = quin_1)
+      # addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors1,
+      #                                            border = c("bottom","right","left","top"), textDecoration = "bold"), 
+      #         rows = 1, cols = quin_1)
       
-      addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors2,
-                                                  border = c("bottom","right","left","top"), textDecoration = "bold"), 
-               rows = 1, cols = quin_2)}
+      #addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = colors2,
+      #                                            border = c("bottom","right","left","top"), textDecoration = "bold"), 
+      #        rows = 1, cols = quin_2)
+    }
     
     
     ## Widths for the rest of the data
