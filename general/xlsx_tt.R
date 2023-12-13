@@ -1,4 +1,4 @@
-xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx"){
+xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation , expression_matrix, filename = "TT_res.xlsx"){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
