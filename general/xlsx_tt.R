@@ -1,4 +1,5 @@
-xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx"){
+xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx",
+                    color_samples = NULL){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -6,9 +7,11 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
   colnames(meta_data) <- "exp_group" 
   
   # meta data colors
-  color_for_later <- c("#ff6699","#92d050","#00b0f0",
-                       "#cc8128","#53c4b0","red")
-  total_samples <- unique(meta_data$exp_group)
+  ####color_for_later <- c("#ff6699","#92d050","#00b0f0",
+  ####                     "#cc8128","#53c4b0","red")
+  color_for_later <- color_samples
+  ##total_samples <- unique(meta_data$exp_group)
+  total_samples <- unique(names(color_samples))
   color_sample <- as.data.frame(tibble::tibble(
     total_samples = total_samples,
     colorins = color_for_later[1:length(total_samples)]
