@@ -135,6 +135,8 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     ## Add adjusted p value style
     adjusted_p_val_columns <- which(colnames(dataset) == "adj.P.Val")
     adjusted_p_val_sign_rows <- which(dataset$adj.P.Val <= 0.05)
+    added_value <- max(adjusted_p_val_sign_rows)+1
+    adjusted_p_val_sign_rows <- c(adjusted_p_val_sign_rows,added_value)
     
     addStyle(wb, sheet = m, style = createStyle(halign = "right", fgFill = "#c3eccb", fontColour = "#1f7046"), 
              rows = adjusted_p_val_sign_rows, cols = adjusted_p_val_columns)
