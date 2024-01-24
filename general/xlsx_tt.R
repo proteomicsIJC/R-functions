@@ -1,5 +1,23 @@
+#############
+## xlsx_tt ##
+#############
+
+## fit__1 = limma fit object with its expression matrix and the contrasts done
+## meta_data = meta_data dataframe with rownames assigned to sample names
+## meta_sample_column = a column name of the meta_data dataset where the sample names are specified
+## meta_data_column = a column name of the meta_data dataset where the groups of the samples are specified
+## annotation = annotation for the rownames of the expression matrix, it needs to have a column to be named Accession which will have to correspond to the rownames of the expression matrix,
+## also, rownames of the annotation dataframe shall correspond to the Accession column
+## expression_matrix = expression matrix with colnames as sample names as in the meta_data object and rownames as the rownames of the annotation rownames
+## filename = the file name of the xlsx writen file, if it already exists it will crash
+## color_samples = a named vector with names as group names and values as colors, colours shall be in hex value or be a color name recognized by R
+## differentiating_element = the character element that differentiate the elements of the contrast, preset is " vs. "
+# ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
+#     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
+##
+
 xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx",
-                    color_samples = NULL){
+                    color_samples = NULL, differentation_element = " vs. "){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -10,6 +28,16 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
   ####color_for_later <- c("#ff6699","#92d050","#00b0f0",
   ####                     "#cc8128","#53c4b0","red")
   color_for_later <- color_samples
+  for (i in 1:length(color_for_later)){
+    if (isFALSE(str_detect(pattern = "\\#", string = color_for_later[i]))){
+      rgb_vals <- col2rgb(color_for_later[i])
+      hex_code <- rgb(rgb_vals[1], rgb_vals[2], rgb_vals[3], maxColorValue = 255)
+      color_for_later[i] <- hex_code
+    } else {
+      color_for_later[i] <- color_for_later[i]
+    }
+  }
+  
   ##total_samples <- unique(meta_data$exp_group)
   total_samples <- unique(names(color_samples))
   color_sample <- as.data.frame(tibble::tibble(
@@ -80,8 +108,8 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     }
     ## Parsing rule for the contrasts
     both_samples <- tt_names[j]
-    samples1 <- stringr::str_split(both_samples," vs. ", simplify = T)[1]
-    samples2 <- stringr::str_split(both_samples," vs. ", simplify = T)[2]
+    samples1 <- stringr::str_split(both_samples,differentation_element, simplify = T)[1]
+    samples2 <- stringr::str_split(both_samples,differentation_element, simplify = T)[2]
     if (samples2 == "rest") {
       samples2 <- unique(meta_data$exp_group[!meta_data$exp_group %in% samples1])
     } else {
