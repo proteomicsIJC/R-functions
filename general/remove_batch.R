@@ -1,4 +1,5 @@
-remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove_batch_effect = F ,where_is_the_batch1 = NULL, where_is_the_batch2 = NULL){
+remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove_batch_effect = F ,where_is_the_batch1 = NULL, where_is_the_batch2 = NULL,
+                         report_results = T){
   if (remove == "no"){
     un_batched_data <- dataset
     
@@ -12,9 +13,10 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     batching <- batching[,-1]
     batching <<- batching
     print("Batch effect won't be removed")
+    if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("remove == no"), file = "./results/used_parameters.txt", sep = "\n", append = T)
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
   if (remove == "yes" & use_pool == T){
     print("Batch effect removed using pool data")
@@ -44,10 +46,10 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     batching <- batching[,-1]
     batching <<- batching
     
-    
+    if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("remove == yes ","use_pool == T"), file = "./results/used_parameters.txt", sep = "\n", append = T)
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
   if (remove == "yes" & use_combat == T){
     print("Removing batch effect usign ComBat")
@@ -73,9 +75,10 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     un_batched_data <- un_batched_data %>%
       relocate(unbatched_intensity, .after = normalized_intensity)
     batching <<- batching
+    if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("remove == yes "," use_combat == T"), file = "./results/used_parameters.txt", sep = "\n", append = T)
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
   if (remove == "yes" & use_remove_batch_effect == T){
     print("Removing batch effect usign removeBatchEffect")
@@ -105,9 +108,10 @@ remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove
     un_batched_data <- un_batched_data %>%
       relocate(unbatched_intensity, .after = normalized_intensity)
     batching <<- batching
+    if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("remove == yes "," use_remove_batch_effect == T"), file = "./results/used_parameters.txt",  append = T, sep = "\n")
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
     
   }
   return(un_batched_data)

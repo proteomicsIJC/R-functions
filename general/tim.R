@@ -1,4 +1,4 @@
-tim <- function(impute,dataset,NAs_prop,presence_no_presence = F){
+tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results = T){
   # PGs that have some NA
   for_nas <- dataset
   cols <- c("protein_group")
@@ -31,9 +31,10 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F){
       filter(n() >= length(unique(sample_name))) %>%
       ungroup()
     imputed_data <- dataset
+    if (report_results){
     cat("tim - for NA imputation",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("impute == no"), file = "./results/used_parameters.txt", sep = "\n", append = T)
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
   if (impute == "yes"){
     print("Missing values will be imputed using mice. A maximum proportion of ")
@@ -81,9 +82,10 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F){
       group_by(across(all_of(cols))) %>%
       filter(n() == n) %>%
       ungroup()
+    if (report_results){
     cat("tim - for NA imputation",file = "./results/used_parameters.txt",sep = "\n", append = T)
     cat(paste0("impute == yes ",unique(NAs_prop)), file = "./results/used_parameters.txt", sep = "\n", append = T)
-    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")
+    cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
   if (presence_no_presence == T){
     cat("Returning an expression matrix with all NAs to do presence/No presence analysis")
