@@ -17,7 +17,7 @@
 ##
 
 xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx",
-                    color_samples = NULL, differentation_element = " vs. "){
+                    color_samples = NULL, differentation_element = " vs. ", more_than_a_group_per_sample = F){
   ##### Definition of some thing i'll need <3
   ### meta data work
   rownames(meta_data) <- meta_data[,meta_sample_column]
@@ -106,27 +106,32 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
     if (tt_names[j] == "ANOVA"){
       next
     }
-    ## Parsing rule for the contrasts
-    both_samples <- tt_names[j]
-    samples1 <- stringr::str_split(both_samples,differentation_element, simplify = T)[1]
-    samples2 <- stringr::str_split(both_samples,differentation_element, simplify = T)[2]
-    if (samples2 == "rest") {
-      samples2 <- unique(meta_data$exp_group[!meta_data$exp_group %in% samples1])
-    } else {
-      samples2 <- samples2
+    if (isTRUE(more_than_a_group_per_sample)){
+      
     }
+    if (isFALSE(more_than_a_group_per_sample)){
+      ## Parsing rule for the contrasts
+      both_samples <- tt_names[j]
+      samples1 <- stringr::str_split(both_samples,differentation_element, simplify = T)[1]
+      samples2 <- stringr::str_split(both_samples,differentation_element, simplify = T)[2]
+      if (samples2 == "rest") {
+        samples2 <- unique(meta_data$exp_group[!meta_data$exp_group %in% samples1])
+      } else {
+          samples2 <- samples2}
+      samples_to_work <- c(samples1,samples2)
+      }
     
     ## meta data work
     meta_data_now <- meta_data %>% 
-      filter(exp_group %in% c(samples1,samples2))  
+      filter(exp_group %in% c(samples_to_work))  
     meta_data_now <- meta_data_now %>% 
       mutate(Rows = rownames(meta_data_now)) %>% 
-      arrange(factor(exp_group, levels = c(samples1,samples2)))
+      arrange(factor(exp_group, levels = c(samples_to_work)))
     rownames(meta_data_now) <- meta_data_now$Rows 
     meta_data_now <- meta_data_now %>% 
       subset(select = -c(Rows))
     
-    samples_now <- rownames(meta_data_now)[meta_data_now$exp_group %in% c(samples1,samples2)]
+    samples_now <- rownames(meta_data_now)[meta_data_now$exp_group %in% c(samples_to_work)]
     ## expression matrix
     expression_matrix_now <- expression_matrix[,samples_now]
     list_of_tts[[j]] <- merge(list_of_tts[[j]], y = expression_matrix_now, by = "row.names")
