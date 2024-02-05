@@ -1,10 +1,22 @@
-tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results = T){
+##########
+## tim ##
+#########
+
+# impute: yes or no, whether if we want to impute the data or not
+# presence_no_presence: to get all the data with all the missing values
+# report results: in case we have to save the results or not
+# intensity_to_impute: colname of the intensity we want to apply the imputation on
+# dataset: a long format dataframe: it requires to have a intensity column, a proteim_group column and a exp_group column that will define the NAs_prpp proportion
+# NAs_prop: the max proportion of NA values per group to consider the nimber to enter the imputation
+
+
+tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results = T, intensity_to_impute = ""){
   # PGs that have some NA
   for_nas <- dataset
   cols <- c("protein_group")
   for_nas <- for_nas %>%
     group_by(across(all_of(cols))) %>%
-    mutate(count_NA = sum(is.na(normalized_intensity))) %>%
+    mutate(count_NA = sum(is.na(get(intensity_to_impute)))) %>%
     ungroup()
   for_nas <- for_nas %>%
     filter(count_NA > 0)
@@ -18,7 +30,7 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results
     cols <- c("protein_group")
     dataset <- dataset %>%
       group_by(across(all_of(cols))) %>%
-      mutate(count_NA = sum(is.na(normalized_intensity))) %>%
+      mutate(count_NA = sum(is.na(get(intensity_to_impute)))) %>%
       ungroup()
     
     # Filter pg with less than NAs_prop
@@ -42,10 +54,10 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results
     cols <- c("protein_group","exp_group")
     dataset <- dataset %>%
       group_by(across(all_of(cols))) %>%
-      mutate(count_NA = sum(is.na(normalized_intensity))) %>%
-      mutate(per_NA = sum(is.na(normalized_intensity)) /sum(sum(is.na(normalized_intensity)) + sum(!is.na(normalized_intensity)))) %>%
+      mutate(count_NA = sum(is.na(get(intensity_to_impute)))) %>%
+      mutate(per_NA = sum(is.na(get(intensity_to_impute))) /sum(sum(is.na(get(intensity_to_impute))) + sum(!is.na(get(intensity_to_impute))))) %>%
       ungroup() %>%
-      mutate(was_NA = ifelse(is.na(normalized_intensity) == T,"Was NA","Was not NA"))
+      mutate(was_NA = ifelse(is.na(get(intensity_to_impute)) == T,"Was NA","Was not NA"))
     
     # Filter pg with less than NAs_prop
     dataset <- dataset %>%
@@ -53,7 +65,7 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results
     
     # Reshape the data to impute
     to_imput <- reshape2::dcast(dataset, 
-                                protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
+                                protein_group ~ sample_name, value.var= intensity_to_impute, fun.aggregate = median)
     
     rownames(to_imput) <- to_imput$protein_group
     to_imput <- to_imput[,-1]
@@ -68,14 +80,14 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results
     
     imputed_data_long <- data_frame("sample_name" = samples,
                                     "protein_group" = pgs,
-                                    "normalized_intensity" = values)
+                                    imputed_intensity = values)
     
-    dataset[,"normalized_intensity_before_imputation"] <- dataset[,"normalized_intensity"]
-    dataset <- subset(dataset, select = -c(normalized_intensity))
+    #####dataset[,"normalized_intensity_before_imputation"] <- dataset[,intensity_to_impute]
+    #####    dataset <- subset(dataset, select = -c(normalized_intensity))
     
     imputed_data <- merge(imputed_data_long, dataset, by = c("sample_name","protein_group"))
     imputed_data <- imputed_data %>%
-      relocate(normalized_intensity, .after = intens)
+      relocate(imputed_intensity, .after = all_of(intensity_to_impute))
     
     cols <- c("protein_group")
     imputed_data <- imputed_data %>%
@@ -90,7 +102,7 @@ tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results
   if (presence_no_presence == T){
     cat("Returning an expression matrix with all NAs to do presence/No presence analysis")
     to_imput <- reshape2::dcast(dataset, 
-                                protein_group ~ sample_name, value.var="normalized_intensity", fun.aggregate = median)
+                                protein_group ~ sample_name, value.var= intensity_to_impute, fun.aggregate = median)
     
     rownames(to_imput) <- to_imput$protein_group
     to_imput <- to_imput[,-1]
