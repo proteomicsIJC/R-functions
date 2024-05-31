@@ -7,8 +7,8 @@
 ## sample_names = column for the real sample names
 ## intensity_to_combine = column with the intensity to combine
 ## other_intensities = column with the names of other intensities they will be removed if remove_reps is T
-## remove_reps = remove technical replicates column and also remve the other_intensities cols
-## report results = wether if the process of the function should be reported or not in the used_parameters file
+## remove_reps = remove technical replicates column and also remove the other_intensities cols
+## report results = whether if the process of the function should be reported or not in the used_parameters file
 
 sample_combination <- function(dataset,
                                technical_replicates = "", sample_names = "", 
