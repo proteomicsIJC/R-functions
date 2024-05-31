@@ -1,3 +1,11 @@
+##################################
+### log2_to_pattern_label_free ###
+##################################
+
+## patterns = a vector of sample names
+## dataset = a dataset in "expression matrix" format with colnames as sample names 
+## report_results = make it or not able to write in the used_parameters.txt file
+
 log2_to_pattern_label_free <- function(patterns,dataset,report_results = T){
   print("log 2 transformation of the intensity values")
   if (report_results){

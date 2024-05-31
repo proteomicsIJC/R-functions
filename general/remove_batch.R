@@ -1,3 +1,19 @@
+####################
+### remove_batch ###
+####################
+
+## dataset = a long format dataset with a column named normalized_intensity, protein_group and sample_or_pool,
+# a column named plex is required when using the POOL.
+## remove = yes or no
+## use_combat = T/F
+## use_pool = T/F use the pool to remove the effect: to do the operation we will need a column named sample_or_pool indicating wether if a sample is sample or POOL
+# samples will be annotated as sample and POOLs as POOL. "IMPORTANT" another column with the plexs of the experiment as this has been thought as a workarround 
+# for TMT.
+## use_remove_batch_effect = T/F use remove_batch_effect function
+## where_is_batch_1 = named vector with the batches of batch effector 1, used in use_combat and in use_remove_batch_effect
+## where_is_batch_2 = named vector with the batches of batch effector 2, used only in use_remove_batch_effect
+## report_results = make it or not able to write in the used_parameters.txt file
+
 remove_batch <- function(dataset, remove,use_combat = F, use_pool =F, use_remove_batch_effect = F ,where_is_the_batch1 = NULL, where_is_the_batch2 = NULL,
                          report_results = T){
   if (remove == "no"){

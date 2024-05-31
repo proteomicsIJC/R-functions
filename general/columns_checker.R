@@ -1,3 +1,9 @@
+#######################
+### columns_checker ###
+#######################
+
+## dataset = A long format dataframe with a column named sample_name and a second column named normalized_intensity  
+
 columns_checker <- function(dataset){
   print("Note that only those groups that will be printed will be those corresponding to samples and not pools")
   batching <- dataset %>% 

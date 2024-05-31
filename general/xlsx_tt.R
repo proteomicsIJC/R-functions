@@ -107,7 +107,7 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
       next
     }
     if (isTRUE(more_than_a_group_per_sample)){
-      
+      ""
     }
     if (isFALSE(more_than_a_group_per_sample)){
       ## Parsing rule for the contrasts

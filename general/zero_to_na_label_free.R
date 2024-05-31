@@ -1,3 +1,10 @@
+#############################
+### zero_to_NA_label_free ###
+#############################
+
+## patterns = a vector of sample names 
+## dataset = a dataset in "expression matrix" format with colnames as sample names 
+
 zero_to_NA_label_free <- function(patterns,dataset) {
   print("Zero values have been transformed to NAs")
   for (i in 1:length(patterns)){
