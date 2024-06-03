@@ -28,10 +28,8 @@ sample_combination <- function(dataset,
       distinct()
     if (!is.null(other_intensities)){
       dataset <- dataset %>% 
-        subset(select = -c(other_intensities))
-    }
-    
-    } if (isFALSE(remove_reps)){
+        subset(select = -c(other_intensities))}} 
+  if (isFALSE(remove_reps)){
     dataset <- dataset %>% 
       group_by(get(sample_names)) %>% 
       mutate(combined_intensity = median(get(intensity_to_combine), na.rm = T))
