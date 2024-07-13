@@ -1,16 +1,13 @@
-##########################
-### sample_combination ###
-##########################
-
-## dataset = a long format dataframe with some intensity to combine between technical reps
-## technical_replicates = column for the technical reps
-## sample_names = column for the real sample names
-## expression_unit = the grouping column for the entries of each sample (Protein.Group,Accession,Gene.names ...)
-## intensity_to_combine = column with the intensity to combine
-## other_intensities = column with the names of other intensities they will be removed if remove_reps is T
-## remove_reps = remove technical replicates column and also remove the other_intensities cols
-## report results = whether if the process of the function should be reported or not in the used_parameters file
-
+#' Combine the expression profile of various technical replicates to create a single sample from them by median
+#' @param dataset long format datase with a column named sample_name
+#' @param technical_replicates column for the technical reps
+#' @param sample_names  column for the real sample names
+#' @param expression_unit  the grouping column for the entries of each sample (Protein.Group,Accession,Gene.names ...)
+#' @param intensity_to_combine  column with the intensity to combine
+#' @param other_intensities  column with the names of other intensities they will be removed if remove_reps is T
+#' @param remove_reps  remove technical replicates column and also remove the other_intensities cols
+#' @param report_results  whether if the process of the function should be reported or not in the used_parameters file
+#' @export
 sample_combination <- function(dataset,
                                technical_replicates = "", sample_names = "",
                                expression_unit = "", intensity_to_combine = "",

@@ -1,12 +1,9 @@
-###################
-### remove_samp ###
-###################
-
-## dataset = long format dataframe with sa sample_name column
-## samples = samples to remove (if nothing is specified the function doesn't remove anything)
-## reasons = optional, vector with the reasons to remove the samples
-## report_results = make it or not able to write in the used_parameters.txt file
-
+#' Remove a sample or a group of samples
+#' @param dataset long format datase with a column named sample_name
+#' @param samples vector of names of the samples to remove
+#' @param reasons vector for the reasons why each of the removed smaples are removed from the analysis
+#' @param report_results make it or not able to write in the used_parameters.txt file
+#' @export
 remove_samp <- function(dataset, samples=NULL, reasons=NULL, report_results= T){
   if(!is.null(samples)){
     print("Removing indicated samples")

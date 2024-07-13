@@ -1,15 +1,15 @@
-###########
-### tim ###
-###########
-
-## impute = yes or no, whether if we want to impute the data or not
-## dataset = a long format dataframe: it requires to have a intensity column, a proteim_group column and a exp_group column that will define the NAs_prpp proportion
-# and also a sample_name column
-## NAs_prop = the max proportion of NA values per group to consider the nimber to enter the imputation
-## presence_no_presence = to get all the data with all the missing values
-## intensity_to_impute = colname of the intensity we want to apply the imputation on
-## report results = in case we have to save the results or not
-
+#' Using mice impute missing values with less than a proportion of NAs in all experimental groups
+#' @param dataset long format datase with a column named sample_name
+#' @param technical_replicates column for the technical reps
+#' @param sample_names  column for the real sample names
+#' @param impute  yes or no, whether if we want to impute the data or not
+#' @param dataset  a long format dataframe: it requires to have a intensity column, a proteim_group column and a exp_group column that will define the NAs_prpp proportion
+#' and also a sample_name column
+#' @param NAs_prop  the max proportion of NA values per group to consider the nimber to enter the imputation
+#' @param presence_no_presence  to get all the data with all the missing values
+#' @param intensity_to_impute  colname of the intensity we want to apply the imputation on
+#' @param report_results  in case we have to save the results or not
+#' @export
 tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results = T, intensity_to_impute = ""){
   # PGs that have some NA
   for_nas <- dataset

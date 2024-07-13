@@ -1,21 +1,17 @@
-#############
-## xlsx_tt ##
-#############
-
-## fit__1 = limma fit object with its expression matrix and the contrasts done
-## meta_data = meta_data dataframe with rownames assigned to sample names
-## meta_sample_column = a column name of the meta_data dataset where the sample names are specified
-## meta_data_column = a column name of the meta_data dataset where the groups of the samples are specified
-## annotation = annotation for the rownames of the expression matrix, it needs to have a column to be named Accession which will have to correspond to the rownames of the expression matrix,
-## also, rownames of the annotation dataframe shall correspond to the Accession column
-## expression_matrix = expression matrix with colnames as sample names as in the meta_data object and rownames as the rownames of the annotation rownames
-## filename = the file name of the xlsx writen file, if it already exists it will crash
-## color_samples = a named vector with names as group names and values as colors, colours shall be in hex value or be a color name recognized by R
-## differentiating_element = the character element that differentiate the elements of the contrast, preset is " vs. "
-# ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
-#     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
-##
-
+#' Trasnform limma results into an excel file
+#' @param  fit__1 limma fit object with its expression matrix and the contrasts done
+#' @param meta_data meta_data dataframe with rownames assigned to sample names
+#' @param meta_sample_column a column name of the meta_data dataset where the sample names are specified
+#' @param meta_data_column a column name of the meta_data dataset where the groups of the samples are specified
+#' @param annotation annotation for the rownames of the expression matrix, it needs to have a column to be named Accession which will have to correspond to the rownames of the expression matrix,
+#' also, rownames of the annotation dataframe shall correspond to the Accession column
+#' @param expression_matrix expression matrix with colnames as sample names as in the meta_data object and rownames as the rownames of the annotation rownames
+#' @param filename the file name of the xlsx writen file, if it already exists it will crash
+#' @param color_samples a named vector with names as group names and values as colors, colours shall be in hex value or be a color name recognized by R
+#' @param differentiating_element the character element that differentiate the elements of the contrast, preset is " vs. "
+#' ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
+#'     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
+#' @export
 xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, annotation, expression_matrix, filename = "TT_res.xlsx",
                     color_samples = NULL, differentation_element = " vs. ", more_than_a_group_per_sample = F){
   ##### Definition of some thing i'll need <3

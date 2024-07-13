@@ -1,13 +1,10 @@
-################
-## upsidedown ##
-################
-
-## contmat = a contrast matrix
-## comparisons to change = a character vector with all the comparisons which order shoud be changed
-## differentiating_element = the character element that differentiate the elements of the contrast
-# ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
-#     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
-
+#' Change the direction of contrasts in a limma contrast matrix
+#' @param contmat  a contrast matrix
+#' @param comparisons_to_change  a character vector with all the comparisons which order shoud be changed
+#' @param differentiating_element  the character element that differentiate the elements of the contrast
+#' ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
+#'     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
+#' @export
 upsidedown <- function(contmat, comparisons_to_change=NULL, differentiating_element = " .vs "){
   if (is.null(comparisons_to_change)){
     contmat <- contmat}
