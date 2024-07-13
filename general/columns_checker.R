@@ -13,5 +13,6 @@ columns_checker <- function(dataset){
                     protein_group ~ sample_name, value.var="normalized_intensity",
                     fun.aggregate = mean)
   batching <- batching[,-1]
+   ###### HOLA !!!!
   print(colnames(batching))
 }
