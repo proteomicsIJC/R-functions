@@ -76,8 +76,8 @@ remove_batch <- function(dataset, tmt,
       batching <- dataset}
     
     batching <- reshape2::dcast(batching, 
-                      get(unit_of_work) ~ sample_name, value.var= intensity, fun.aggregate = median)
-    
+                      get(unit_of_work) ~ sample_name, value.var= "normalized_intensity", fun.aggregate = median)
+    colnames(batching)[1] <- unit_of_work
     rownames(batching) <- batching[,unit_of_work]
     batching <- batching[,-1]
     batching <- ComBat(dat = batching, batch = where_is_the_batch1)
@@ -93,7 +93,7 @@ remove_batch <- function(dataset, tmt,
     
     un_batched_data <- merge(dataset, batched_data_long)
     un_batched_data <- un_batched_data %>%
-      relocate(unbatched_intensity, .after = get(intensity))
+      relocate(unbatched_intensity, .after = all_of(intensity))
     batching <<- batching
     if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
@@ -111,7 +111,7 @@ remove_batch <- function(dataset, tmt,
     
     batching <- reshape2::dcast(batching, 
                       get(unit_of_work) ~ sample_name, value.var= intensity, fun.aggregate = median)
-    
+    colnames(batching)[1] <- unit_of_work
     rownames(batching) <- batching[,unit_of_work]
     batching <- batching[,-1]
     if (is.null(where_is_the_batch2)){
@@ -131,7 +131,7 @@ remove_batch <- function(dataset, tmt,
     
     un_batched_data <- merge(dataset, batched_data_long)
     un_batched_data <- un_batched_data %>%
-      relocate(unbatched_intensity, .after = get(intensity))
+      relocate(unbatched_intensity, .after = all_of(intensity))
     batching <<- batching
     if (report_results){
     cat("remove_batch",file = "./results/used_parameters.txt",sep = "\n", append = T)
