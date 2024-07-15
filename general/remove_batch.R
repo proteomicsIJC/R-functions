@@ -16,7 +16,7 @@
 #' @export
 remove_batch <- function(dataset, tmt, 
                          remove,
-                         intensity, unit_of_work, 
+                         intensity, unit_of_work = "Protein.Group", 
                          use_combat = F,use_pool = F,use_remove_batch_effect = F ,
                          where_is_the_batch1 = NULL, where_is_the_batch2 = NULL,
                          report_results = T){
@@ -68,8 +68,12 @@ remove_batch <- function(dataset, tmt,
   #### COMBAT
   if (remove == "yes" & use_combat == T){
     print("Removing batch effect usign ComBat")
+    
+    if ("sample_or_pool" %in% colnames(dataset)){
     batching <- dataset %>% 
-      filter(sample_or_pool == "sample")
+      filter(sample_or_pool == "sample")}
+    if (!"sample_or_pool" %in% colnames(dataset)){
+      batching <- dataset}
     
     batching <- reshape2::dcast(batching, 
                       get(unit_of_work) ~ sample_name, value.var= intensity, fun.aggregate = median)
@@ -96,10 +100,14 @@ remove_batch <- function(dataset, tmt,
     cat(paste0("remove == yes "," use_combat == T"), file = "./results/used_parameters.txt", sep = "\n", append = T)
     cat(paste0(rep("_",50), collapse = ""), file = "./results/used_parameters.txt",append = T, sep = "\n")}
   }
+  #### Remove batch effect
   if (remove == "yes" & use_remove_batch_effect == T){
     print("Removing batch effect usign removeBatchEffect")
-    batching <- dataset %>% 
-      filter(sample_or_pool == "sample")
+    if ("sample_or_pool" %in% colnames(dataset)){
+      batching <- dataset %>% 
+        filter(sample_or_pool == "sample")}
+    if (!"sample_or_pool" %in% colnames(dataset)){
+      batching <- dataset}
     
     batching <- reshape2::dcast(batching, 
                       get(unit_of_work) ~ sample_name, value.var= intensity, fun.aggregate = median)
