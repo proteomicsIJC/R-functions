@@ -3,7 +3,8 @@
 #' @param contaminants path to a fasta file with contamiants
 #' @param accession_name column_name where accessions of contaminants may be stored 
 #' @export
-remove_contaminants <- function(dataset, contaminants, accession_name) {
+remove_contaminants <- function(dataset,accession_name,
+                                contaminants) {
   print(paste0("Removing contaminants from the data using ",contaminants))
   cn <- colnames(dataset)
   cont <- readLines(contaminants)

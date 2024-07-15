@@ -3,7 +3,8 @@
 #' @param dataset a dataset in "expression matrix" format with colnames as sample names 
 #' @param report_results make it or not able to write in the used_parameters.txt file
 #' @export
-log2_to_pattern <- function(patterns,dataset, report_results = T){
+log2_to_pattern <- function(patterns,dataset,
+                            report_results = T){
   if (report_results){
     print("log 2 transformation of the intensity values")
     print("Note that, negative values after transformation have been assigned to NA")

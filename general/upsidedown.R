@@ -5,7 +5,8 @@
 #' ej. For a comparison named group1 vs. group3 differentiate element is " .vs " with the spaces !!!!!
 #'     For a comparison named group1_vs_group3 differentiate element is "_vs_"  wichout the spaces if no spaces are in the contrast matrix !!!
 #' @export
-upsidedown <- function(contmat, comparisons_to_change=NULL, differentiating_element = " .vs "){
+upsidedown <- function(contmat, comparisons_to_change=NULL, 
+                       differentiating_element = " .vs "){
   if (is.null(comparisons_to_change)){
     contmat <- contmat}
   if (!is.null(comparisons_to_change)){

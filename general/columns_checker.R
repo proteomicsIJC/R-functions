@@ -6,8 +6,7 @@
 #' sample_or_pool, where "sample" indicates a sample and POOL indicates that that sample is really a POOL
 #' @export
 columns_checker <- function(dataset,
-                            unit_of_analysis = "Protein.Group",
-                            intensity = "normalized_intensity",
+                            unit_of_analysis = "Protein.Group",intensity = "normalized_intensity",
                             tmt = F){
   print("Note that only those groups that will be printed will be those corresponding to samples and not pools")
   if (isFALSE(tmt)){

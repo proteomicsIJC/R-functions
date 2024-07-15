@@ -4,7 +4,9 @@
 #' @param reasons vector for the reasons why each of the removed smaples are removed from the analysis
 #' @param report_results make it or not able to write in the used_parameters.txt file
 #' @export
-remove_samp <- function(dataset, samples=NULL, reasons=NULL, report_results= T){
+remove_samp <- function(dataset, 
+                        samples=NULL, reasons=NULL, 
+                        report_results= T){
   if(!is.null(samples)){
     print("Removing indicated samples")
     if (report_results){

@@ -10,8 +10,11 @@
 #' @param intensity_to_impute  colname of the intensity we want to apply the imputation on
 #' @param report_results  in case we have to save the results or not
 #' @export
-tim <- function(impute,dataset,NAs_prop,presence_no_presence = F, report_results = T, intensity_to_impute = "", 
-                unit_to_impute = "Protein.Group", experimental_groups = NULL){
+tim <- function(impute,dataset,
+                NAs_prop, experimental_groups = NULL,
+                intensity_to_impute = "", unit_to_impute = "Protein.Group",
+                presence_no_presence = F,  
+                report_results = T){
   # meta_data for the imputation
   # if it is NULL. all samples come from the same group
   if(is.null(experimental_groups)){
