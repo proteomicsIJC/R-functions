@@ -15,9 +15,9 @@ columns_checker <- function(dataset,
     batching <- dataset %>% 
     filter(sample_or_pool == "sample")}
   
-  batching <- reshape2::dcast(batching, 
-                    get(unit_of_analysis) ~ sample_name, value.var = intensity,
-                    fun.aggregate = mean)
-  batching <- batching[,-1]
-  print(colnames(batching))
+  # batching <- reshape2::dcast(batching, 
+  #                   get(unit_of_analysis) ~ sample_name, value.var = intensity,
+  #                   fun.aggregate = mean)
+  # batching <- batching[,-1]
+  # print(colnames(batching))
 }
