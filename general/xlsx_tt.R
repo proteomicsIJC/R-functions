@@ -141,7 +141,7 @@ xlsx_tt <- function(fit__1, meta_data, meta_sample_column, meta_data_column, ann
   for (k in 1:length(list_of_tts)){
     list_of_tts[[k]] <- merge(annotation, list_of_tts[[k]], by = "row.names")
     # Clean the data
-    colnames(list_of_tts[[k]])[1] <- "Accession"
+    colnames(list_of_tts[[k]])[1] <- "Protein.Group"
     list_of_tts[[k]] <- list_of_tts[[k]][, !duplicated(colnames(list_of_tts[[k]]))]
     list_of_tts[[k]] <- list_of_tts[[k]] %>% 
       arrange(adj.P.Val)}
