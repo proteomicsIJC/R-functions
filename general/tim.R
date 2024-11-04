@@ -29,21 +29,30 @@ tim <- function(impute,dataset,
   }
   
   # meta_data for the imputation
-  # if it is NULL. all samples come from the same group
-  if(is.null(experimental_groups)){
-    meta_data_for_imputation <- tibble::tibble(
-      sample_name = unique(dataset$sample_name),
-      exp_group = rep("Ungrouped", times = length(unique(dataset$sample_name)))
-    )
-    dataset <- merge(dataset, meta_data_for_imputation, by = "sample_name")
-  }
-  
-  if(!is.null(experimental_groups)){
-    meta_data_for_imputation <- dataset %>% 
-      subset(select = c(sample_name, get(experimental_groups))) %>% 
-      distinct()
-    colnames(meta_data_for_imputation)[2] <- "exp_group"
-    dataset <- merge(dataset, meta_data_for_imputation, by = "sample_name")
+  if (impute == "yes"){  
+    if(is.null(experimental_groups)){
+      meta_data_for_imputation <- tibble::tibble(
+        sample_name = unique(dataset$sample_name),
+        exp_group = rep("Ungrouped", times = length(unique(dataset$sample_name)))
+      )
+      if ("exp_group" %in% colnames(dataset)){
+        dataset <- dataset[,-c(grep(pattern = "exp_group",
+                                    x = colnames(dataset))),drop = F]
+      }
+      dataset <- merge(dataset, meta_data_for_imputation, by = "sample_name")
+    }
+    
+    if(!is.null(experimental_groups)){
+      meta_data_for_imputation <- dataset
+      meta_data_for_imputation <- meta_data_for_imputation[,grep(pattern = paste0(c("sample_name",experimental_groups),collapse = "|"), 
+                                                                 x = colnames(meta_data_for_imputation)), drop = F]
+      meta_data_for_imputation <- meta_data_for_imputation %>% 
+        distinct()
+      colnames(meta_data_for_imputation)[2] <- "exp_group"
+      
+      dataset <- dataset[,-c(grep(pattern = experimental_groups, x = colnames(dataset))), drop = F]
+      dataset <- merge(dataset, meta_data_for_imputation, by = "sample_name")
+    }
   }
   
   ### NO Nas (impute == "no")
